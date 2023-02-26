@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>To Do App!</title>
+
+  <style>
+    #todo-item {
+      font-weight: 700;
+      font-size: 2em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Title -->
+  <h1>My To Do's!</h1>
+
+  <!-- Input Form -->
+  <form>
+    <span id="todo-item">To Do Item: <input id="to-do" type="text" >
+        <button id="add-to-do">Add Item</button></span>
+  </form>
+
+  <hr>
+
+  <!-- To-Do List -->
+  <div id="to-dos"></div>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Script -->
+  <script>
+    const toDoFromLocalStorage = localStorage.getItem("todos");
+      const inp = document.querySelector("#to-do");
+      const btn = document.querySelector("#add-to-do");
+      const todos = document.querySelector("#to-dos");
+      const todolist = toDoFromLocalStorage? JSON.parse(toDoFromLocalStorage):[];
+      show();
+    function show(){
+        todos.innerHTML="";
+        for (let ind in todolist) {
+               const todo = todolist[ind]
+                const element = document.createElement("p");
+                element.innerHTML= todo;
+                todos.append(element);      
+                const btn =document.createElement("button");
+                btn.innerHTML="remove"
+                btn.addEventListener("click",function(e){
+                    if(!confirm("are you sure")){
+                        return;
+                    }
+                    e.preventDefault();
+                    element.remove();
+                    todolist.splice(ind,1);
+                    localStorage.setItem("todos",JSON.stringify(todolist))
+                })      
+                element.prepend(btn);
+            
+        }
+    }
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        const value = inp.value;
+        inp.value ="";
+        todolist.push(value);
+        localStorage.setItem("todos", JSON.stringify(todolist));
+        show();
+      })
+
+  </script>
+
+</body>
+
+</html>
